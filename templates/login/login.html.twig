@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="h-screen">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Treinamento DTI{% endblock %}</title>
+    <link rel="shortcut icon" href="{{ asset('images/coren.png') }}" type="image/x-icon">
+
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+</head>
+<body class="flex flex-col h-screen">
+
+<div class="flex items-center justify-center flex-col w-full h-full bg-background dark:bg-dark-background">
+    <!-- Logo -->
+    <div class="mt-12">
+        <img src="{{ asset('images/Corensc_branco.png') }}"
+             alt="Logo do Coren-SC"
+             class="hidden dark:block"
+             width="120"
+        />
+        <img src="{{ asset('images/Corensc_preto.png') }}"
+             alt="Logo do Coren-SC"
+             class="block dark:hidden"
+             width="120"
+        />
+    </div>
+
+    <!-- Inputs no centro -->
+    <div class="flex flex-col items-center justify-center flex-1 w-full">
+
+        <div class="flex flex-col gap-y-8 w-full items-center justify-center">
+            <div class="w-1/4">
+                <label for="input-user-label" class="sr-only">Email</label>
+                <input type="text" id="input-user-label" class="py-3 px-4 block w-full rounded-md text-sm shadow shadow-md dark:bg-dark-input dark:placeholder-placeholder" placeholder="Usuário">
+            </div>
+
+            <div class="w-1/4">
+                <label for="input-email-label" class="sr-only">Senha</label>
+                <input type="email" id="input-email-label" class="py-3 px-4 block w-full rounded-md text-sm shadow shadow-md dark:bg-dark-input dark:placeholder-placeholder" placeholder="Senha">
+            </div>
+
+            <a href="#" class="bg-primary w-1/4 h-12 flex justify-center items-center dark:text-primary text-dark-text dark:bg-button-light dark:hover:bg-button-hover shadow shadow-md rounded-md">Entrar</a>
+        </div>
+
+
+    </div>
+</div>
+
+</body>
