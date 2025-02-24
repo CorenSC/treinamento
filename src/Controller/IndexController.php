@@ -2,35 +2,29 @@
 
 namespace App\Controller;
 
+use App\Repository\VideoRepository;
 use App\Util\LdapService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Attribute\Route;
 
 class IndexController extends AbstractController
 {
-
-    private LdapService $ldapService;
+    private VideoRepository $videoRepository;
 
     /**
-     * @param LdapService $ldapService
+     * @param VideoRepository $videoRepository
      */
-    public function __construct(LdapService $ldapService)
+    public function __construct(VideoRepository $videoRepository)
     {
-        $this->ldapService = $ldapService;
+        $this->videoRepository = $videoRepository;
     }
 
-    #[Route('/', name: 'index')]
-    public function home()
-    {
-        return $this->render('inicial/inicial.html.twig');
-    }
-
-    #[Route('ldap', name: 'ldap')]
-    public function ldap() {
-        $ldap = $this->ldapService->obterTodosUsersLdap();
+    #[Route('/', name: 'home')]
+    public function home() {
+        $videos = $this->videoRepository->findAll();
 
         return $this->render('inicial/inicial.html.twig', [
-            'ldap' => $ldap
+            'videos' => $videos
         ]);
     }
 }

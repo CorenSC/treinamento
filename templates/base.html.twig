@@ -2,7 +2,7 @@
 <html lang="pt-br" class="h-screen">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Treinamento DTI{% endblock %}</title>
+    <title>{% block title %}AprendeAI{% endblock %}</title>
     <link rel="shortcut icon" href="{{ asset('images/coren.png') }}" type="image/x-icon">
 
     {% block stylesheets %}
@@ -44,7 +44,7 @@
 {#                </div>#}
 {#            {% else %}#}
                 <!-- Se o usuário NÃO estiver logado -->
-                <a href="#"
+                <a href="{{ path('app_login') }}"
                    class="px-4 py-2 bg-button-light rounded-md flex items-center justify-around text-primary shadow-md hover:bg-button-hover active:bg-button-hover
                     transition-all duration-150 ease-in-out transform active:scale-95 active:shadow-lg">
                     <i class="fa-solid fa-arrow-right-to-bracket"></i> Entrar
@@ -57,16 +57,16 @@
     <!-- Conteúdo principal -->
     <div class="flex-1 bg-background dark:bg-dark-background flex flex-col text-primary dark:text-dark-text">
 
-        {% block main %}
-            <div class="flex-1 p-6">
-                Ainda pensando no que colocar aqui!
+            <div class="flex-1 p-6 mb-12">
+                {% block main %}
+                        Ainda pensando no que colocar aqui!
+                {% endblock %}
             </div>
-        {% endblock %}
 
         {% block footer %}
             <!-- Footer -->
             <footer class="text-center py-6">
-                <p class="text-sm">© {{ "now"|date('Y') }} Treinamento DTI | Todos os direitos reservados.</p>
+                <p class="text-sm">© {{ "now"|date('Y') }} AprendeAI - Coren-SC | Todos os direitos reservados.</p>
             </footer>
         {% endblock %}
     </div>
