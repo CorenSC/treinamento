@@ -24,32 +24,44 @@
     <aside class="w-64 bg-primary dark:bg-dark-primary text-white h-full flex flex-col">
         <!-- Logo -->
         <div class="w-full flex items-center justify-center py-4">
-            <img src="{{ asset('images/Corensc_branco.png') }}" alt="Logo do Coren-SC" width="120">
+            <a href="{{ path('home') }}">
+                <img src="{{ asset('images/Corensc_branco.png') }}" alt="Logo do Coren-SC" width="120">
+            </a>
         </div>
-        <nav class="p-4 flex-1">
-            {% block itens_nav %}
-            {% endblock %}
+        <nav class="p-4 flex-1 flex flex-col gap-4">
+            {% if app.user.departament == "DTI" %}
+                <a href="{{ path('video_new') }}" class="px-4 py-2 gap-2 bg-button-light rounded-md flex items-center justify-around text-primary shadow-md hover:bg-button-hover active:bg-button-hover
+                    transition-all duration-150 ease-in-out transform active:scale-95 active:shadow-lg"><i class="fa-solid fa-circle-play"></i>Cadastrar vídeo</a>
+                <a href="{{ path('training_index') }}" class="px-4 py-2 gap-4 bg-button-light rounded-md flex items-center justify-around text-primary shadow-md hover:bg-button-hover active:bg-button-hover
+                    transition-all duration-150 ease-in-out transform active:scale-95 active:shadow-lg"><i class="fa-solid fa-book-open-reader"></i>Tipo treinamento</a>
+            {% endif %}
         </nav>
-        <nav class="p-4 mt-auto pb-6">
-{#            {% if app.user %}#}
-                <!-- Se o usuário estiver logado -->
-{#                <div class="relative">#}
-{#                    <button class="px-4 py-2 bg-button-light rounded-md flex items-center justify-around text-primary shadow-md hover:bg-button-hover active:bg-button-hover#}
-{#                    transition-all duration-150 ease-in-out transform active:scale-95 active:shadow-lg">#}
-{#                        <i class="fa-solid fa-user-circle"></i> Matheus Luz#}
-{#                    </button>#}
-{#                    <div class="absolute right-0 mt-2 w-48 bg-white text-black rounded-md shadow-lg hidden group-hover:block">#}
-{#                        <a href="#" class="block px-4 py-2 text-primary hover:bg-gray-200">Sair</a>#}
-{#                    </div>#}
-{#                </div>#}
-{#            {% else %}#}
+        <nav class="p-4 mt-auto pb-6 flex items-center justify-center">
+            {% if app.user %}
+                <div class="hs-dropdown relative inline-flex mb-12">
+                    <button id="hs-dropdown-custom-trigger" type="button" class="px-4 gap-4 py-2 bg-button-light rounded-md flex items-center justify-around text-primary shadow-md hover:bg-button-hover active:bg-button-hover
+                    transition-all duration-150 ease-in-out transform active:scale-95 active:shadow-lg" aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
+                        <i class="fa-solid fa-user-circle"></i>
+                        <span class="text-primary font-medium truncate max-w-[7.5rem]">{{ app.user.name }}</span>
+                        <svg class="hs-dropdown-open:rotate-180 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+                    </button>
+
+                    <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 hidden min-w-50 bg-white shadow-md rounded-lg mt-2" role="menu" aria-orientation="vertical" aria-labelledby="hs-dropdown-custom-icon-trigger">
+                        <div class="p-1 space-y-0.5">
+                            <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-primary hover:bg-button-hover focus:outline-none focus:bg-button-hover dark:hover:bg-primary dark:hover:text-dark-text dark:focus:bg-primary" href="{{ path('app_logout') }}">
+                                <i class="fa-solid fa-right-from-bracket"></i> Sair
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
                 <!-- Se o usuário NÃO estiver logado -->
                 <a href="{{ path('app_login') }}"
-                   class="px-4 py-2 bg-button-light rounded-md flex items-center justify-around text-primary shadow-md hover:bg-button-hover active:bg-button-hover
+                   class="px-4 py-2 gap-4 bg-button-light rounded-md flex items-center justify-around text-primary shadow-md hover:bg-button-hover active:bg-button-hover
                     transition-all duration-150 ease-in-out transform active:scale-95 active:shadow-lg">
                     <i class="fa-solid fa-arrow-right-to-bracket"></i> Entrar
                 </a>
-{#            {% endif %}#}
+            {% endif %}
         </nav>
     </aside>
 
@@ -59,7 +71,6 @@
 
             <div class="flex-1 p-6 mb-12">
                 {% block main %}
-                        Ainda pensando no que colocar aqui!
                 {% endblock %}
             </div>
 

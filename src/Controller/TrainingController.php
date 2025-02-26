@@ -18,10 +18,16 @@ final class TrainingController extends AbstractController
     {
     }
 
-    #[Route(name: 'index', methods: ['GET'])]
-    public function index(TrainingRepository $trainingRepository): Response
+    #[Route('/', name: 'index', methods: ['GET'])]
+    public function index()
     {
-        return $this->render('training/index.html.twig', [
+        return $this->render('training/index.html.twig');
+    }
+
+    #[Route('/listar', name: 'listar', methods: ['GET'])]
+    public function list(TrainingRepository $trainingRepository): Response
+    {
+        return $this->render('training/list.html.twig', [
             'trainings' => $trainingRepository->findAll(),
         ]);
     }
@@ -38,7 +44,7 @@ final class TrainingController extends AbstractController
             $this->trainingRepository->add($training);
             $this->addFlash('success', 'Treinamento criado com sucesso.');
 
-            return $this->redirectToRoute('training_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('training_listar', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('training/new.html.twig', [
@@ -65,7 +71,7 @@ final class TrainingController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', 'Treinamento atualizado com sucesso.');
-            return $this->redirectToRoute('training_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('training_listar', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('training/edit.html.twig', [

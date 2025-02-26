@@ -4,11 +4,12 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: 'user', schema: 'aprendeAI')]
-class User implements UserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -21,12 +22,11 @@ class User implements UserInterface
     #[ORM\Column(length: 255)]
     private ?string $username = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $password = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Departament $departament = null;
+    #[ORM\Column(length: 255)]
+    private ?string $departament = null;
 
     #[ORM\Column]
     private ?bool $active = true;
@@ -72,12 +72,12 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getDepartament(): ?Departament
+    public function getDepartament(): ?string
     {
         return $this->departament;
     }
 
-    public function setDepartament(?Departament $departament): static
+    public function setDepartament(?string $departament): static
     {
         $this->departament = $departament;
 

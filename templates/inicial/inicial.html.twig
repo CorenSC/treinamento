@@ -6,7 +6,7 @@
 
     {# Agrupando vídeos por tipo #}
     {% for video in videos %}
-        {% if video.typeTraining.name not in groupedVideos %}
+        {% if video.typeTraining.name not in groupedVideos|keys %}
             {% set groupedVideos = groupedVideos | merge({ (video.typeTraining.name): [] }) %}
         {% endif %}
         {% set groupedVideos = groupedVideos | merge({ (video.typeTraining.name): groupedVideos[video.typeTraining.name] | merge([video]) }) %}
@@ -16,6 +16,7 @@
     {% for typeName, videoList in groupedVideos %}
         <h3 class="mb-2 mt-6 text-primary font-bold dark:text-dark-text">{{ typeName }}</h3> <!-- Título do tipo de treinamento -->
 
+        {# Definindo a quantidade de slides com base no número de vídeos #}
         {% set slidesQty = videoList|length == 1 ? 1 : 2 %}
         <div data-hs-carousel='{
             "loadingClasses": "opacity-0",
@@ -67,6 +68,10 @@
                 /
                 <span class="hs-carousel-info-total ms-1">0</span>
             </div>
+        </div>
+    {% else %}
+        <div class="h-full flex items-center justify-center text-2xl gap-2">
+            <i class="fa-solid fa-circle-info"></i>Ainda nada a mostrar ☹️
         </div>
     {% endfor %}
 

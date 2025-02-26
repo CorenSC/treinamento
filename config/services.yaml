@@ -24,6 +24,6 @@ services:
         arguments:
             $dn: 'CN=AprendeAi AUTH,OU=Serviços,OU=Florianópolis - Sede,OU=Usuários,OU=COREN-SC,DC=coren,DC=local'
             $password: '14l5Y_9m)_7Z'
-            $host: '101.44.196.135'
+            $host: '192.168.1.17'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

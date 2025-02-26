@@ -45,6 +45,7 @@ class VideoType extends AbstractType
                 'label' => 'TIpo de treinamento:*',
                 'class' => Training::class,
                 'choice_label' => 'name',
+                'placeholder' => '--Selecione--',
                 'attr' => [
                     "class" => "py-3 px-4 block w-full rounded-md text-sm shadow shadow-md dark:bg-dark-input dark:placeholder-placeholder dark:text-dark-text"
                 ],
