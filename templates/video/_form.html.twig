@@ -13,14 +13,10 @@
             {{ form_label(form.typeTraining) }}
             {{ form_widget(form.typeTraining) }}
         </div>
-        <div class="text-primary dark:text-dark-text w-1/2">
-            {{ form_label(form.thumbnail) }}
-            {{ form_widget(form.thumbnail) }}
-        </div>
 
 
         <button class="w-1/2 bg-primary h-12 flex justify-center items-center dark:text-primary text-dark-text dark:bg-button-light dark:hover:bg-button-hover shadow shadow-md rounded-md transition-all duration-150 ease-in-out transform active:scale-95 active:shadow-lg cursor-pointer">Salvar</button>
     </div>
 
 
-{{ form_end(form) }}
+{{ form_end(form, {'render_rest': false }) }}

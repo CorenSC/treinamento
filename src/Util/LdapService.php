@@ -42,7 +42,6 @@ class LdapService
             ];
         }
 
-            dump($resultadoFiltrado);
         return $resultadoFiltrado;
     }
 }

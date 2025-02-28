@@ -69,14 +69,15 @@ class AprendeAIAuthenticator extends AbstractLoginFormAuthenticator
 
         if (!$user) {
             $user = new User();
-            $user->setUsername($username);
             $user->setName($cn);
-            $user->setDepartament($description);
             $user->setActive(true);
-
-            $this->entityManager->persist($user);
-            $this->entityManager->flush();
         }
+
+        $user->setUsername($username);
+        $user->setDepartament($description);
+
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
 
         $token = Uuid::v4()->toRfc4122();
 

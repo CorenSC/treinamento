@@ -1,1 +1,1 @@
-ALTER TABLE user CHANGE password password VARCHAR(255) DEFAULT NULL;
+DROP TABLE departament;

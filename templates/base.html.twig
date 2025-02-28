@@ -29,11 +29,16 @@
             </a>
         </div>
         <nav class="p-4 flex-1 flex flex-col gap-4">
-            {% if app.user.departament == "DTI" %}
-                <a href="{{ path('video_new') }}" class="px-4 py-2 gap-2 bg-button-light rounded-md flex items-center justify-around text-primary shadow-md hover:bg-button-hover active:bg-button-hover
+            {% if app.user %}
+                {% if app.user.departament == "DTI" or app.user.departament == "ASCOM" or app.user.departament == "SECEX" %}
+                    <a href="{{ path('video_new') }}" class="px-4 py-2 gap-2 bg-button-light rounded-md flex items-center justify-around text-primary shadow-md hover:bg-button-hover active:bg-button-hover
                     transition-all duration-150 ease-in-out transform active:scale-95 active:shadow-lg"><i class="fa-solid fa-circle-play"></i>Cadastrar vídeo</a>
-                <a href="{{ path('training_index') }}" class="px-4 py-2 gap-4 bg-button-light rounded-md flex items-center justify-around text-primary shadow-md hover:bg-button-hover active:bg-button-hover
+                    <a href="{{ path('training_index') }}" class="px-4 py-2 gap-4 bg-button-light rounded-md flex items-center justify-around text-primary shadow-md hover:bg-button-hover active:bg-button-hover
                     transition-all duration-150 ease-in-out transform active:scale-95 active:shadow-lg"><i class="fa-solid fa-book-open-reader"></i>Tipo treinamento</a>
+                {% endif %}
+            {% else %}
+                {% block nav %}
+                {% endblock %}
             {% endif %}
         </nav>
         <nav class="p-4 mt-auto pb-6 flex items-center justify-center">
@@ -58,7 +63,7 @@
                 <!-- Se o usuário NÃO estiver logado -->
                 <a href="{{ path('app_login') }}"
                    class="px-4 py-2 gap-4 bg-button-light rounded-md flex items-center justify-around text-primary shadow-md hover:bg-button-hover active:bg-button-hover
-                    transition-all duration-150 ease-in-out transform active:scale-95 active:shadow-lg">
+                    transition-all duration-150 ease-in-out transform active:scale-95 active:shadow-lg w-4/5">
                     <i class="fa-solid fa-arrow-right-to-bracket"></i> Entrar
                 </a>
             {% endif %}
