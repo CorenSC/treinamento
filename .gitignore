@@ -15,4 +15,5 @@
 npm-debug.log
 yarn-error.log
 /diferencas.sql
+/diferencas_prod.sql
 ###< symfony/webpack-encore-bundle ###

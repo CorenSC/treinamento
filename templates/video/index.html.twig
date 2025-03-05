@@ -46,12 +46,12 @@
                                 <tbody class="divide-y divide-gray-600">
                                 {% for video in videos %}
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">{{ video.id }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{{ video.title }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 text-right">{{ video.videoId }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 text-right">{{ video.typeTraining.name  }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{{ video.active ? "Sim" : "Não" }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary dark:text-dark-text">{{ video.id }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary dark:text-dark-text">{{ video.title }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary dark:text-dark-text">{{ video.videoId }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary dark:text-dark-text">{{ video.typeTraining.name  }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary dark:text-dark-text">{{ video.active ? "Sim" : "Não" }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary dark:text-dark-text">
                                             <a href="{{ path('video_edit', {'id': video.id}) }}" title="Editar" class="w-24 h-24 p-2 text-dark-text dark:text-primary bg-primary dark:bg-button-light dark:hover:bg-button-hover rounded-md shadow-md hover:bg-hover"><i class="fa-solid fa-pen-to-square"></i></a>
                                         </td>
                                     </tr>

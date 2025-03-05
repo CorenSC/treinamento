@@ -30,16 +30,6 @@ class VideoType extends AbstractType
                     "class" => "py-3 px-4 block w-full rounded-md text-sm shadow shadow-md dark:bg-dark-input dark:placeholder-placeholder dark:text-dark-text"
                 ]
             ])
-            ->add('thumbnail', FileType::class, [
-                'label' => 'Thumbnail:*',
-                'attr' => [
-                    "class" => "py-3 px-4 block w-full rounded-md text-sm shadow shadow-md dark:bg-dark-input dark:placeholder-placeholder dark:text-dark-text"
-                ],
-                'row_attr' => [
-                    'class' => 'd-none' // Esconde a renderização padrão
-                ],
-                'mapped' => true // Se necessário, se não for mapeado para a entidade
-            ])
 
             ->add('typeTraining', EntityType::class, [
                 'label' => 'TIpo de treinamento:*',

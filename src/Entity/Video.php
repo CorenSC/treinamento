@@ -21,9 +21,6 @@ class Video
     #[ORM\Column(length: 255)]
     private ?string $videoId = null;
 
-    #[ORM\Column(type: Types::BLOB)]
-    private $thumbnail = null;
-
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?Training $typeTraining = null;
@@ -56,18 +53,6 @@ class Video
     public function setVideoId(string $videoId): static
     {
         $this->videoId = $videoId;
-
-        return $this;
-    }
-
-    public function getThumbnail()
-    {
-        return $this->thumbnail;
-    }
-
-    public function setThumbnail($thumbnail): static
-    {
-        $this->thumbnail = $thumbnail;
 
         return $this;
     }

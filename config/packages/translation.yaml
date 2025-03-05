@@ -1,0 +1,5 @@
+# config/packages/translation.yaml
+framework:
+  default_locale: 'pt_BR'
+  translator:
+    fallbacks: ['pt_BR']

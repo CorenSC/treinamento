@@ -1,0 +1,7 @@
+# translations/security.pt_BR.yaml
+security:
+  authentication:
+    error:
+      invalid_credentials: 'Credenciais inválidas'
+      expired_token: 'Token expirado'
+      # outras traduções de erros de autenticação
