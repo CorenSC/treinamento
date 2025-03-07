@@ -92,7 +92,7 @@ logMessage("Dependências do Composer instaladas com sucesso.", 'success');
 
 // Otimizar o autoloader do Composer
 logMessage("Otimizando o autoloader do Composer...", 'info');
-list($output, $return_var) = runRemoteCommand("cd {$deployDir} && composer dump-autoload --optimize --no-dev");
+list($output, $return_var) = runRemoteCommand("cd {$deployDir} && COMPOSER_ALLOW_SUPERUSER=1 composer dump-autoload --optimize --no-dev");
 
 if ($return_var !== 0) {
     logMessage("Erro ao otimizar o autoloader do Composer: " . implode("\n", $output), 'error');
