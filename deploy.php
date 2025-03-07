@@ -125,7 +125,7 @@ logMessage("Permissões de diretórios públicos ajustadas com sucesso.", 'succe
 
 // Instalar dependências do npm
 logMessage("Instalando dependências do npm...", 'info');
-list($output, $return_var) = runRemoteCommand("cd {$deployDir} && npm install --omit=dev");
+list($output, $return_var) = runRemoteCommand("cd {$deployDir} && npm install");
 
 if ($return_var !== 0) {
     logMessage("Erro ao instalar dependências do npm: " . implode("\n", $output), 'error');
