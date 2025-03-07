@@ -5,115 +5,160 @@ $repoUrl = 'https://github.com/CorenSC/treinamento.git';
 $branch = 'master';
 $deployDir = '/var/www/aprendeAi';
 $logFile = '/var/log/deploy.log';
+$remoteUser = 'root';
+$remoteHost = '172.17.60.63';
 
-// Função para logar mensagens
-function logMessage($message)
+$currentUser = get_current_user();
+
+function logMessage($message, $status = 'info')
 {
     global $logFile;
     $timestamp = date('Y-m-d H:i:s');
-    file_put_contents($logFile, "[$timestamp] $message\n", FILE_APPEND);
+    $logEntry = "[$timestamp] $message\n";
+
+    // Grava no arquivo de log
+    file_put_contents($logFile, $logEntry, FILE_APPEND);
+
+    // Define cores de fundo para o terminal
+    switch ($status) {
+        case 'success':
+            $color = "\033[42m"; // Fundo verde
+            break;
+        case 'error':
+            $color = "\033[41m"; // Fundo vermelho
+            break;
+        case 'info':
+        default:
+            $color = "\033[44m"; // Fundo azul
+            break;
+    }
+
+    // Limpa cor após a mensagem
+    $resetColor = "\033[0m";
+
+    // Exibe no terminal com a cor apropriada
+    echo $color . $logEntry . $resetColor;
+}
+
+function runRemoteCommand($command)
+{
+    global $remoteUser, $remoteHost;
+    $sshCommand = "ssh {$remoteUser}@{$remoteHost} '{$command}'";
+    exec($sshCommand, $output, $return_var);
+    return [$output, $return_var];
 }
 
 // Definir o APP_ENV como 'prod'
 putenv('APP_ENV=prod');
-logMessage("APP_ENV definido como 'prod'.");
+logMessage("APP_ENV definido como 'prod'.", 'info');
 
-// Verificar se o diretório de deploy já existe
-if (is_dir($deployDir)) {
-    logMessage("Atualizando repositório...");
-    chdir($deployDir);
-    exec("git fetch origin 2>&1", $output, $return_var);
-    exec("git reset --hard origin/$branch 2>&1", $output, $return_var);
+// Verificar se o diretório existe e atualizar ou clonar o repositório
+list($output, $return_var) = runRemoteCommand("[ -d {$deployDir} ] && echo 'exists' || echo 'not exists'");
+
+if (trim(implode("\n", $output)) === 'exists') {
+    logMessage("Atualizando repositório...", 'info');
+    list($output, $return_var) = runRemoteCommand("cd {$deployDir} && git fetch origin && git reset --hard origin/{$branch}");
 } else {
-    // Se não existir, clonar o repositório
-    logMessage("Clonando repositório...");
-    exec("git clone $repoUrl $deployDir 2>&1", $output, $return_var);
+    logMessage("Diretório não existe. Criando o diretório...", 'info');
+    list($output, $return_var) = runRemoteCommand("mkdir -p {$deployDir}");
+    logMessage("Clonando repositório...", 'info');
+    list($output, $return_var) = runRemoteCommand("git clone {$repoUrl} {$deployDir}");
 }
 
-// Verificar se o comando foi executado com sucesso
 if ($return_var !== 0) {
-    logMessage("Erro ao atualizar/clonar o repositório: " . implode("\n", $output));
+    logMessage("Erro ao atualizar/clonar o repositório: " . implode("\n", $output), 'error');
     exit(1);
 }
 
-logMessage("Repositório atualizado com sucesso.");
-
-logMessage("Ajustando permissões de arquivos...");
-exec("chown -R www-data:www-data $deployDir/var 2>&1", $output, $return_var);
-exec("chmod -R 775 $deployDir/var 2>&1", $output, $return_var);
-
-if ($return_var !== 0) {
-    logMessage("Erro ao ajustar permissões: " . implode("\n", $output));
-    exit(1);
-}
-
-logMessage("Permissões ajustadas com sucesso.");
+logMessage("Repositório atualizado com sucesso.", 'success');
 
 // Instalar dependências do Composer
-logMessage("Instalando dependências do Composer...");
-chdir($deployDir);
-exec("composer install --no-dev --optimize-autoloader 2>&1", $output, $return_var);
+logMessage("Instalando dependências do Composer...", 'info');
+list($output, $return_var) = runRemoteCommand("cd {$deployDir} && COMPOSER_ALLOW_SUPERUSER=1 composer install --no-interaction");
 
 if ($return_var !== 0) {
-    logMessage("Erro ao instalar dependências do Composer: " . implode("\n", $output));
+    logMessage("Erro ao instalar dependências do Composer: " . implode("\n", $output), 'error');
     exit(1);
 }
 
-logMessage("Dependências do Composer instaladas com sucesso.");
+logMessage("Dependências do Composer instaladas com sucesso.", 'success');
+
+// Ajustar permissões de arquivos
+logMessage("Ajustando permissões de arquivos...", 'info');
+list($output, $return_var) = runRemoteCommand("chown -R www-data:www-data {$deployDir}/var && chmod -R 775 {$deployDir}/var");
+
+if ($return_var !== 0) {
+    logMessage("Erro ao ajustar permissões: " . implode("\n", $output), 'error');
+    exit(1);
+}
+
+logMessage("Permissões ajustadas com sucesso.", 'success');
 
 // Instalar dependências do npm
-logMessage("Instalando dependências do npm...");
-exec("npm install 2>&1", $output, $return_var);
+logMessage("Instalando dependências do npm...", 'info');
+list($output, $return_var) = runRemoteCommand("cd {$deployDir} && npm install");
 
 if ($return_var !== 0) {
-    logMessage("Erro ao instalar dependências do npm: " . implode("\n", $output));
+    logMessage("Erro ao instalar dependências do npm: " . implode("\n", $output), 'error');
     exit(1);
 }
 
-logMessage("Dependências do npm instaladas com sucesso.");
+logMessage("Dependências do npm instaladas com sucesso.", 'success');
 
 // Rodar o build com npm
-logMessage("Rodando o build com npm...");
-exec("npm run build 2>&1", $output, $return_var);
+logMessage("Rodando o build com npm...", 'info');
+list($output, $return_var) = runRemoteCommand("cd {$deployDir} && npm run build");
 
 if ($return_var !== 0) {
-    logMessage("Erro ao rodar o build com npm: " . implode("\n", $output));
+    logMessage("Erro ao rodar o build com npm: " . implode("\n", $output), 'error');
     exit(1);
 }
 
-logMessage("Build com npm concluído com sucesso.");
+logMessage("Build com npm concluído com sucesso.", 'success');
 
 // Limpar o cache do Symfony
-logMessage("Limpando o cache do Symfony...");
-exec("php bin/console cache:clear --env=prod 2>&1", $output, $return_var);
+logMessage("Limpando o cache do Symfony...", 'info');
+list($output, $return_var) = runRemoteCommand("cd {$deployDir} && php bin/console cache:clear --env=prod");
 
 if ($return_var !== 0) {
-    logMessage("Erro ao limpar o cache do Symfony: " . implode("\n", $output));
+    logMessage("Erro ao limpar o cache do Symfony: " . implode("\n", $output), 'error');
     exit(1);
 }
 
-logMessage("Cache do Symfony limpo com sucesso.");
+logMessage("Cache do Symfony limpo com sucesso.", 'success');
 
-// Rodar migrações de banco de dados (se necessário)
-logMessage("Rodando migrações de banco de dados...");
-exec("php bin/console doctrine:migrations:migrate --no-interaction --env=prod 2>&1", $output, $return_var);
+// Verificar diferenças nas migrações
+logMessage("Verificando diferenças nas migrações...", 'info');
+list($output, $return_var) = runRemoteCommand("cd {$deployDir} && php bin/console doctrine:migrations:diff --no-interaction --env=prod");
 
 if ($return_var !== 0) {
-    logMessage("Erro ao rodar migrações: " . implode("\n", $output));
-    exit(1);
-}
+    logMessage("Não há diferença entre o projeto e o banco de dados: " . implode("\n", $output), 'error');
+} else {
+    list($migrationFiles, $return_var) = runRemoteCommand("ls {$deployDir}/migrations/*.php 2>/prod/null | wc -l");
 
-logMessage("Migrações de banco de dados concluídas com sucesso.");
+    if (trim(implode("\n", $migrationFiles)) > 0) {
+        logMessage("Diferenças encontradas. Rodando migrações de banco de dados...", 'info');
+        list($output, $return_var) = runRemoteCommand("cd {$deployDir} && php bin/console doctrine:migrations:migrate --no-interaction --env=prod");
+
+        if ($return_var !== 0) {
+            logMessage("Erro ao rodar migrações: " . implode("\n", $output), 'error');
+        } else {
+            logMessage("Migrações de banco de dados concluídas com sucesso.", 'success');
+        }
+    } else {
+        logMessage("Nenhuma diferença encontrada. Pulando migrações.", 'info');
+    }
+}
 
 // Reiniciar o Nginx (opcional, se necessário)
-logMessage("Reiniciando o Nginx...");
-exec("sudo systemctl restart nginx 2>&1", $output, $return_var);
+logMessage("Reiniciando o Nginx...", 'info');
+list($output, $return_var) = runRemoteCommand("systemctl restart nginx");
 
 if ($return_var !== 0) {
-    logMessage("Erro ao reiniciar o Nginx: " . implode("\n", $output));
+    logMessage("Erro ao reiniciar o Nginx: " . implode("\n", $output), 'error');
     exit(1);
 }
 
-logMessage("Nginx reiniciado com sucesso.");
+logMessage("Nginx reiniciado com sucesso.", 'success');
 
-logMessage("Deploy concluído com sucesso.");
+logMessage("Deploy concluído com sucesso.", 'success');

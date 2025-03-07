@@ -5,6 +5,7 @@ namespace App\Security;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Util\LdapService;
+use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,8 +33,7 @@ class AprendeAIAuthenticator extends AbstractLoginFormAuthenticator
         private readonly LdapService $ldapService,
         private UserRepository $userRepository,
         private EntityManagerInterface $entityManager
-    )
-    {
+    ) {
     }
 
     public function authenticate(Request $request): Passport
@@ -41,11 +41,12 @@ class AprendeAIAuthenticator extends AbstractLoginFormAuthenticator
         $username = $request->getPayload()->getString('username');
         $password = $request->getPayload()->getString('password');
 
+        // Verifica as credenciais no LDAP
         $ldapUsers = $this->ldapService->obterTodosUsersLdap();
         $userFound = false;
 
         foreach ($ldapUsers as $ldapUser) {
-            if($ldapUser['sAMAccountName'] === $username) {
+            if ($ldapUser['sAMAccountName'] === $username) {
                 $cn = $ldapUser['cn'];
                 $description = $ldapUser['description'];
                 $userFound = true;
@@ -53,8 +54,16 @@ class AprendeAIAuthenticator extends AbstractLoginFormAuthenticator
             }
         }
 
-        if(!$userFound) {
-            throw new \Exception("Usuário não encontrado");
+        if (!$userFound) {
+            $request->getSession()->set('login_error', 'Usuário não encontrado');
+
+            // Retornar o Passport, pois é o que o Symfony espera
+            return new Passport(
+                new UserBadge($username),
+                new CustomCredentials(function () {
+                    return false; // Credential inválida para manter o fluxo
+                }, $password)
+            );
         }
 
         try {
@@ -62,27 +71,54 @@ class AprendeAIAuthenticator extends AbstractLoginFormAuthenticator
             $ldap = Ldap::create('ext_ldap', ['host' => '192.168.1.17']);
             $ldap->bind($dn, $password);
         } catch (\Exception $e) {
-            throw new \Exception('Credenciais inválidas');
+            $request->getSession()->set('login_error', 'Credenciais inválidas');
+
+            // Retornar o Passport, pois é o que o Symfony espera
+            return new Passport(
+                new UserBadge($username),
+                new CustomCredentials(function () {
+                    return false; // Credential inválida para manter o fluxo
+                }, $password)
+            );
         }
 
-        $user = $this->userRepository->findOneBy(['username' => $username]);
-
-        if (!$user) {
-            $user = new User();
-            $user->setName($cn);
-            $user->setActive(true);
+        // Tenta acessar o banco de dados
+        $databaseAvailable = true;
+        try {
+            $this->entityManager->getConnection()->connect();
+        } catch (ConnectionException $e) {
+            $databaseAvailable = false;
         }
 
-        $user->setUsername($username);
-        $user->setDepartament($description);
+        if ($databaseAvailable) {
+            // Banco de dados disponível: cria ou atualiza o usuário no banco
+            $user = $this->userRepository->findOneBy(['username' => $username]);
 
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
+            if (!$user) {
+                $user = new User();
+                $user->setName($cn);
+                $user->setActive(true);
+            }
+
+            $user->setUsername($username);
+            $user->setDepartament($description);
+
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
+        } else {
+            // Banco de dados indisponível: cria uma sessão temporária
+            $user = [
+                'username' => $username,
+                'name' => $cn,
+                'departament' => $description,
+                'is_temporary' => true, // Marca a sessão como temporária
+            ];
+
+            $request->getSession()->set('temporary_user', $user);
+        }
 
         $token = Uuid::v4()->toRfc4122();
-
         $request->getSession()->set('session_token', $token);
-
         $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $username);
 
         $passport = new Passport(
