@@ -7,6 +7,8 @@ $deployDir = '/var/www/aprendeAi';
 $logFile = '/var/log/deploy.log';
 $remoteUser = 'root';
 $remoteHost = '172.17.60.63';
+$localSecretsDir = '/caminho/para/seu/projeto/config/secrets/prod/'; // Caminho local do diretório de segredos
+$decryptKeyFile = 'prod.decrypt.private.php'; // Nome do arquivo de chave de descriptografia
 
 $currentUser = get_current_user();
 
@@ -68,16 +70,17 @@ if ($return_var !== 0) {
 
 logMessage("Repositório atualizado com sucesso.", 'success');
 
-// Definir APP_ENV=prod no arquivo .env
-logMessage("Definindo APP_ENV=prod no arquivo .env...", 'info');
-list($output, $return_var) = runRemoteCommand("echo 'APP_ENV=prod' > {$deployDir}/.env");
+// Transferir a chave de descriptografia para o servidor
+logMessage("Transferindo chave de descriptografia para o servidor...", 'info');
+$scpCommand = "scp {$localSecretsDir}{$decryptKeyFile} {$remoteUser}@{$remoteHost}:{$deployDir}/config/secrets/prod/";
+exec($scpCommand, $scpOutput, $scpReturnVar);
 
-if ($return_var !== 0) {
-    logMessage("Erro ao definir APP_ENV=prod no arquivo .env: " . implode("\n", $output), 'error');
+if ($scpReturnVar !== 0) {
+    logMessage("Erro ao transferir a chave de descriptografia: " . implode("\n", $scpOutput), 'error');
     exit(1);
 }
 
-logMessage("APP_ENV=prod definido no arquivo .env com sucesso.", 'success');
+logMessage("Chave de descriptografia transferida com sucesso.", 'success');
 
 // Instalar dependências do Composer
 logMessage("Instalando dependências do Composer...", 'info');
@@ -147,7 +150,7 @@ logMessage("Build com npm concluído com sucesso.", 'success');
 
 // Remover arquivos desnecessários
 logMessage("Removendo arquivos desnecessários...", 'info');
-list($output, $return_var) = runRemoteCommand("cd {$deployDir} && rm -rf node_modules .git tests");
+list($output, $return_var) = runRemoteCommand("cd {$deployDir} && rm -rf node_modules .git tests .env.dev");
 
 if ($return_var !== 0) {
     logMessage("Erro ao remover arquivos desnecessários: " . implode("\n", $output), 'error');
