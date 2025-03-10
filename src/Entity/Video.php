@@ -6,7 +6,7 @@ use App\Repository\VideoRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Table(name: 'video', schema: 'aprendeAI')]
+#[ORM\Table(name: 'video', schema: 'db_aprendeai')]
 #[ORM\Entity(repositoryClass: VideoRepository::class)]
 class Video
 {

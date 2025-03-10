@@ -7,8 +7,8 @@ $deployDir = '/var/www/aprendeAi';
 $logFile = '/var/log/deploy.log';
 $remoteUser = 'root';
 $remoteHost = '172.17.60.63';
-$localSecretsDir = '/caminho/para/seu/projeto/config/secrets/prod/'; // Caminho local do diretório de segredos
-$decryptKeyFile = 'prod.decrypt.private.php'; // Nome do arquivo de chave de descriptografia
+$localSecretsDir = '/var/www/treinamento/config/secrets/prod/';
+$decryptKeyFile = 'prod.decrypt.private.php';
 
 $currentUser = get_current_user();
 
@@ -81,6 +81,16 @@ if ($scpReturnVar !== 0) {
 }
 
 logMessage("Chave de descriptografia transferida com sucesso.", 'success');
+
+logMessage("Definindo o APP_ENV para 'prod' no arquivo .env.local...", 'info');
+list($output, $return_var) = runRemoteCommand("cd {$deployDir} && echo 'APP_ENV=prod' > .env.local");
+
+if ($return_var !== 0) {
+    logMessage("Erro ao definir APP_ENV no arquivo .env.local: " . implode("\n", $output), 'error');
+    exit(1);
+}
+
+logMessage("APP_ENV definido como 'prod' no arquivo .env.local com sucesso.", 'success');
 
 // Instalar dependências do Composer
 logMessage("Instalando dependências do Composer...", 'info');

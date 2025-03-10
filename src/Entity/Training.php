@@ -5,7 +5,7 @@ namespace App\Entity;
 use App\Repository\TrainingRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Table(name: "training", schema: "aprendeAI")]
+#[ORM\Table(name: "training", schema: "db_aprendeai")]
 #[ORM\Entity(repositoryClass: TrainingRepository::class)]
 class Training
 {
