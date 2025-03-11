@@ -2,6 +2,7 @@
 <html lang="pt-br" class="h-screen">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}AprendeAI{% endblock %}</title>
     <link rel="shortcut icon" href="{{ asset('images/coren.png') }}" type="image/x-icon">
 
@@ -15,69 +16,110 @@
 </head>
 <body class="flex flex-col h-screen">
 
-{% block header %}
-{% endblock %}
+<!-- Header -->
+<header class="fixed top-0 left-0 right-0 z-50 shadow-md md:hidden">
+    <div class="flex items-center justify-between p-4">
+        <!-- Botão de Menu Hamburguer -->
+        <button type="button" class="lg:hidden text-white focus:outline-none" aria-label="Toggle navigation" onclick="openSidebar()">
+            <i class="fa-solid fa-bars text-2xl"></i>
+        </button>
+
+        <!-- Logo no Header (opcional) -->
+        <a href="{{ path('home') }}" class="hidden lg:block">
+            <img src="{{ asset('images/Corensc_branco.png') }}" alt="Logo do Coren-SC" width="120">
+        </a>
+
+        <div></div>
+    </div>
+</header>
+<!-- End Header -->
 
 <main class="flex flex-1">
 
     <!-- Sidebar -->
-    <aside class="w-64 bg-primary dark:bg-dark-primary text-white h-full flex flex-col">
-        <!-- Logo -->
-        <div class="w-full flex items-center justify-center py-4">
-            <a href="{{ path('home') }}">
-                <img src="{{ asset('images/Corensc_branco.png') }}" alt="Logo do Coren-SC" width="120">
-            </a>
-        </div>
-        <nav class="p-4 flex-1 flex flex-col gap-4">
-            {% if app.user %}
-                {% if app.user.departament == "DTI" or app.user.departament == "ASCOM" or app.user.departament == "SECEX" %}
-                    <a href="{{ path('video_new') }}" class="px-4 py-2 gap-2 bg-button-light rounded-md flex items-center justify-around text-primary shadow-md hover:bg-button-hover active:bg-button-hover
-                    transition-all duration-150 ease-in-out transform active:scale-95 active:shadow-lg"><i class="fa-solid fa-circle-play"></i>Cadastrar vídeo</a>
-                    <a href="{{ path('training_index') }}" class="px-4 py-2 gap-4 bg-button-light rounded-md flex items-center justify-around text-primary shadow-md hover:bg-button-hover active:bg-button-hover
-                    transition-all duration-150 ease-in-out transform active:scale-95 active:shadow-lg"><i class="fa-solid fa-book-open-reader"></i>Tipo treinamento</a>
-                {% endif %}
-            {% else %}
-                {% block nav %}
-                {% endblock %}
-            {% endif %}
-        </nav>
-        <nav class="p-4 mt-auto pb-6 flex items-center justify-center">
-            {% if app.user %}
-                <div class="hs-dropdown relative inline-flex mb-12">
-                    <button id="hs-dropdown-custom-trigger" type="button" class="px-4 gap-4 py-2 bg-button-light rounded-md flex items-center justify-around text-primary shadow-md hover:bg-button-hover active:bg-button-hover
-                    transition-all duration-150 ease-in-out transform active:scale-95 active:shadow-lg" aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
-                        <i class="fa-solid fa-user-circle"></i>
-                        <span class="text-primary font-medium truncate max-w-[7.5rem]">{{ app.user.name }}</span>
-                        <svg class="hs-dropdown-open:rotate-180 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
-                    </button>
+    <div id="hs-sidebar-footer" class="fixed top-0 left-0 bottom-0 z-60 w-64 bg-primary dark:bg-dark-primary transform lg:translate-x-0 transition-transform duration-300 ease-in-out opacity-0 invisible lg:opacity-100 lg:visible -translate-x-full">
+        <div class="relative flex flex-col h-full max-h-full">
+            <!-- Header da Sidebar -->
+            <header class="p-4 flex justify-between items-center gap-x-2">
+                <div class="w-full flex items-center justify-center py-4">
+                    <a href="{{ path('home') }}">
+                        <img src="{{ asset('images/Corensc_branco.png') }}" alt="Logo do Coren-SC" width="120">
+                    </a>
+                </div>
 
-                    <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 hidden min-w-50 bg-white shadow-md rounded-lg mt-2" role="menu" aria-orientation="vertical" aria-labelledby="hs-dropdown-custom-icon-trigger">
-                        <div class="p-1 space-y-0.5">
-                            <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-primary hover:bg-button-hover focus:outline-none focus:bg-button-hover dark:hover:bg-primary dark:hover:text-dark-text dark:focus:bg-primary" href="{{ path('app_logout') }}">
-                                <i class="fa-solid fa-right-from-bracket"></i> Sair
-                            </a>
+                <div class="lg:hidden -me-2">
+                    <!-- Botão de Fechar -->
+                    <button type="button" class="flex justify-center items-center gap-x-3 size-6 bg-white border border-gray-200 text-sm text-gray-600 hover:bg-gray-100 rounded-full disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:hover:text-neutral-200 dark:focus:text-neutral-200" onclick="closeSidebar()">
+                        <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                        <span class="sr-only">Close</span>
+                    </button>
+                </div>
+            </header>
+            <!-- End Header da Sidebar -->
+
+            <!-- Body da Sidebar -->
+            <nav class="h-full overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
+                <div class="hs-accordion-group pb-0 px-2 w-full flex flex-col flex-wrap" data-hs-accordion-always-open>
+                    <ul class="space-y-1">
+                        {% if app.user %}
+                            {% if app.user.departament == "DTI" or app.user.departament == "ASCOM" or app.user.departament == "SECEX" %}
+                                <li>
+                                    <a href="{{ path('video_new') }}" class="w-full inline-flex shrink-0 items-center gap-x-2 p-2 text-start rounded-md hover:bg-neutral-500/60 active:bg-neutral-500/60 transition-all duration-150 ease-in-out transform active:scale-95 text-dark-text dark:hover:bg-neutral-400/60 dark:focus:bg-neutral-400/60 text-base">
+                                        <i class="fa-solid fa-circle-play"></i>
+                                        Cadastrar vídeo
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('training_index') }}" class="w-full inline-flex shrink-0 items-center gap-x-2 p-2 text-start rounded-md hover:bg-neutral-500/60 active:bg-neutral-500/60 transition-all duration-150 ease-in-out transform active:scale-95 text-dark-text dark:hover:bg-neutral-400/60 dark:focus:bg-neutral-400/60 text-base">
+                                        <i class="fa-solid fa-book-open-reader"></i>
+                                        Tipo treinamento
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% else %}
+                            {% block nav %}
+                            {% endblock %}
+                        {% endif %}
+                    </ul>
+                </div>
+            </nav>
+            <!-- End Body da Sidebar -->
+
+            <!-- Footer da Sidebar -->
+            <footer class="mt-auto p-2 border-t border-neutral-400 dark:border-neutral-600/60">
+                {% if app.user %}
+                    <div class="hs-dropdown [--strategy:absolute] [--auto-close:inside] relative w-full inline-flex">
+                        <button id="hs-dropdown-custom-trigger" type="button" class="w-full inline-flex shrink-0 items-center gap-x-2 p-2 text-start text-sm rounded-md hover:bg-neutral-500/60 active:bg-neutral-500/60 transition-all duration-150 ease-in-out transform active:scale-95 text-dark-text dark:hover:bg-neutral-400/60 dark:focus:bg-neutral-400/60" aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
+                            <i class="fa-solid fa-user-circle text-base"></i>
+                            <span class="font-medium truncate max-w-[7.5rem] text-dark-text">{{ app.user.name }}</span>
+                            <svg class="shrink-0 size-3.5 ms-auto" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
+                        </button>
+
+                        <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 hidden min-w-60 bg-white shadow-md rounded-lg mt-2" role="menu" aria-orientation="vertical" aria-labelledby="hs-dropdown-custom-icon-trigger">
+                            <div class="p-1 space-y-0.5">
+                                <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm hover:bg-primary hover:text-dark-text dark:focus:bg-primary" href="{{ path('app_logout') }}">
+                                    <i class="fa-solid fa-right-from-bracket"></i> Sair
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% else %}
-                <!-- Se o usuário NÃO estiver logado -->
-                <a href="{{ path('app_login') }}"
-                   class="px-4 py-2 gap-4 bg-button-light rounded-md flex items-center justify-around text-primary shadow-md hover:bg-button-hover active:bg-button-hover
-                    transition-all duration-150 ease-in-out transform active:scale-95 active:shadow-lg w-4/5">
-                    <i class="fa-solid fa-arrow-right-to-bracket"></i> Entrar
-                </a>
-            {% endif %}
-        </nav>
-    </aside>
-
+                {% else %}
+                    <a href="{{ path('app_login') }}" class="w-full inline-flex shrink-0 items-center gap-x-2 p-2 text-start text-sm rounded-md hover:bg-neutral-500/60 active:bg-neutral-500/60 transition-all duration-150 ease-in-out transform active:scale-95 text-dark-text dark:hover:bg-neutral-400/60 dark:focus:bg-neutral-400/60">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i> Entrar
+                    </a>
+                {% endif %}
+            </footer>
+            <!-- End Footer da Sidebar -->
+        </div>
+    </div>
+    <!-- End Sidebar -->
 
     <!-- Conteúdo principal -->
     <div class="flex-1 bg-background dark:bg-dark-background flex flex-col text-primary dark:text-dark-text">
-
-            <div class="flex-1 p-6 mb-12">
-                {% block main %}
-                {% endblock %}
-            </div>
+        <div class="flex-1 p-6 mb-12">
+            {% block main %}
+            {% endblock %}
+        </div>
 
         {% block footer %}
             <!-- Footer -->
@@ -86,8 +128,37 @@
             </footer>
         {% endblock %}
     </div>
-
 </main>
 
+<!-- JavaScript Puro -->
+<script>
+    // Função para abrir a sidebar
+    function openSidebar() {
+        const sidebar = document.getElementById('hs-sidebar-footer');
+        sidebar.classList.remove('opacity-0', 'invisible'); // Remove as classes que escondem a sidebar
+        sidebar.classList.remove('-translate-x-full'); // Remove a classe que move a sidebar para fora
+    }
+
+    // Função para fechar a sidebar
+    function closeSidebar() {
+        const sidebar = document.getElementById('hs-sidebar-footer');
+        sidebar.classList.add('-translate-x-full'); // Move a sidebar para fora
+        setTimeout(() => {
+            sidebar.classList.add('opacity-0', 'invisible'); // Esconde a sidebar após a animação
+        }, 300); // Tempo da animação (300ms)
+    }
+
+    // Fechar a sidebar ao clicar fora
+    document.addEventListener('click', function (event) {
+        const sidebar = document.getElementById('hs-sidebar-footer');
+        const isClickInsideSidebar = sidebar.contains(event.target); // Verifica se o clique foi dentro da sidebar
+        const isClickOnMenuButton = event.target.closest('[onclick="openSidebar()"]'); // Verifica se o clique foi no botão de abrir
+
+        // Se o clique foi fora da sidebar e não foi no botão de abrir, fecha a sidebar
+        if (!isClickInsideSidebar && !isClickOnMenuButton) {
+            closeSidebar();
+        }
+    });
+</script>
 </body>
 </html>

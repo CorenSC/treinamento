@@ -74,8 +74,11 @@
                     <span class="hs-carousel-info-total ms-1">0</span>
                 </div>
             </div>
-
-        {% endif %} {# Fim da verificação do usuário #}
+        {% else %}
+            <div class="h-full flex items-center justify-center text-2xl gap-2">
+                <i class="fa-solid fa-circle-info"></i>Ainda nada a mostrar ☹️
+            </div>
+        {% endif %}
 
     {% else %}
         <div class="h-full flex items-center justify-center text-2xl gap-2">

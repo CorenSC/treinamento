@@ -160,7 +160,7 @@ logMessage("Build com npm concluído com sucesso.", 'success');
 
 // Remover arquivos desnecessários
 logMessage("Removendo arquivos desnecessários...", 'info');
-list($output, $return_var) = runRemoteCommand("cd {$deployDir} && rm -rf node_modules .git tests .env.dev");
+list($output, $return_var) = runRemoteCommand("cd {$deployDir} && rm -rf node_modules tests .env.dev");
 
 if ($return_var !== 0) {
     logMessage("Erro ao remover arquivos desnecessários: " . implode("\n", $output), 'error');
