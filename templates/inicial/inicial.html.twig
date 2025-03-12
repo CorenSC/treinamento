@@ -19,13 +19,12 @@
                 <h3 class="mb-2 mt-6 text-primary font-bold dark:text-dark-text">{{ typeName }}</h3> <!-- Título do tipo de treinamento -->
 
                 {% set slidesQty = videoList|length == 1 ? 1 : 2 %}
-                {# Define o número de slides com base no tamanho da tela (JavaScript cuidará disso) #}
                 <div data-hs-carousel='{
                     "loadingClasses": "opacity-0",
                     "isInfiniteLoop": true,
                     "slidesQty": {{ slidesQty }},
                     "isDraggable": true
-                }' class="relative">
+                }' class="relative" id="caroussel-{{ loop.index }}">
                     <div class="hs-carousel relative overflow-hidden w-full min-h-96 bg-transparent rounded-lg">
                         <div class="hs-carousel-body absolute top-0 bottom-0 start-0 flex flex-nowrap transition-transform duration-700 opacity-0">
                             {% for video in videoList %}
@@ -74,32 +73,4 @@
             {% endif %}
         {% endfor %}
     {% endif %}
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const carouselElement = document.querySelector('[data-hs-carousel]');
-            const updateSlidesQty = () => {
-                const isMobile = window.innerWidth < 768;
-                if (isMobile) {
-                    const slidesQty = 1;
-                }
-
-                carouselElement.setAttribute('data-hs-carousel', JSON.stringify({
-                    loadingClasses: "opacity-0",
-                    isInfiniteLoop: true,
-                    slidesQty: this.slidesQty,
-                    isDraggable: true
-                }));
-                if (window.HSCarousel) {
-                    new HSCarousel(carouselElement).init();
-                }
-            };
-            updateSlidesQty();
-
-            window.addEventListener('resize', updateSlidesQty);
-        });
-    </script>
 {% endblock %}

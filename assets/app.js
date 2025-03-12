@@ -19,4 +19,27 @@ $(() => {
             $('#dismiss-toast').remove();
         }, 300);
     }, 5000);
+
+    updateSlidesQty();
 })
+
+function updateSlidesQty() {
+    const isMobile = window.innerWidth < 768; // Define o breakpoint para mobile
+
+    // Itera sobre todos os carrosséis
+    $('[data-hs-carousel]').each(function () {
+        const $carousel = $(this);
+        const videoCount = $carousel.find('.hs-carousel-slide').length; // Conta o número de vídeos no carrossel
+
+        // Define slidesQty com base no número de vídeos e no tamanho da tela
+        const slidesQty = videoCount === 1 ? 1 : isMobile ? 1 : 2;
+
+        // Atualiza o atributo data-hs-carousel
+        $carousel.attr('data-hs-carousel', JSON.stringify({
+            loadingClasses: "opacity-0",
+            isInfiniteLoop: true,
+            slidesQty: slidesQty, // Usa a variável slidesQty corretamente
+            isDraggable: true
+        }));
+    });
+}
