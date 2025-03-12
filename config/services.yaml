@@ -25,5 +25,14 @@ services:
             $dn: 'CN=AprendeAi AUTH,OU=Serviços,OU=Florianópolis - Sede,OU=Usuários,OU=COREN-SC,DC=coren,DC=local'
             $password: '%env(LDAP_PASSWORD)%'
             $host: '%env(LDAP_HOST)%'
+
+    App\Util\VideoService:
+        arguments:
+            $videoRepository: '@App\Repository\VideoRepository'
+
+    App\Twig\VideoExtension:
+        arguments:
+            $videoService: '@App\Util\VideoService'
+        tags: [ 'twig.extension' ]
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
