@@ -1,6 +1,6 @@
 twig:
     file_name_pattern: '*.twig'
 
-when@test:
+when@prod:
     twig:
         strict_variables: true

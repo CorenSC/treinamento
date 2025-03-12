@@ -45,7 +45,7 @@
                                 {% for training in trainings %}
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary dark:text-dark-text">{{ training.id }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-primary dark:text-dark-text text-right">{{ training.name  }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-primary dark:text-dark-text">{{ training.name  }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-primary dark:text-dark-text">{{ training.active ? "Sim" : "Não" }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap space-x-2">
                                             <a href="{{ path('training_edit', {'id': training.id}) }}" title="Editar" class="w-24 h-24 p-2 text-dark-text dark:text-primary bg-primary dark:bg-button-light dark:hover:bg-button-hover rounded-md shadow-md hover:bg-hover"><i class="fa-solid fa-pen-to-square"></i></a>

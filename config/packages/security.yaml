@@ -20,6 +20,9 @@ security:
     access_control:
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/$, roles: PUBLIC_ACCESS }
+        - { path: ^/video/\d+$, roles: PUBLIC_ACCESS }
+        - { path: ^/training/listar$, roles: PUBLIC_ACCESS }
+        - { path: ^/_wdt, roles: PUBLIC_ACCESS }  # Permitir acesso à rota _wdt
         - { path: ^/, roles: ROLE_USER }
 
 when@test:
