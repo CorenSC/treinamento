@@ -28,7 +28,13 @@ final class VideoController extends AbstractController
     #[Route(name: 'index', methods: ['GET'])]
     public function index(VideoRepository $videoRepository): Response
     {
-        return $this->render('video/index.html.twig', [
+        return $this->render('video/index.html.twig');
+    }
+
+    #[Route('/list', name: 'list', methods: ['GET'])]
+    public function list(VideoRepository $videoRepository): Response
+    {
+        return $this->render('video/list.html.twig', [
             'videos' => $videoRepository->findAll(),
         ]);
     }

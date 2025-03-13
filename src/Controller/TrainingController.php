@@ -24,7 +24,7 @@ final class TrainingController extends AbstractController
         return $this->render('training/index.html.twig');
     }
 
-    #[Route('/listar', name: 'listar', methods: ['GET'])]
+    #[Route('/list', name: 'list', methods: ['GET'])]
     public function list(TrainingRepository $trainingRepository): Response
     {
         return $this->render('training/list.html.twig', [
