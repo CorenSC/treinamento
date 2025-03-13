@@ -46,50 +46,46 @@ function updateSlidesQty() {
 }
 
 function dropdown() {
-    // Verifica o estado dos dropdowns salvos no localStorage
-    const openDropdownIds = JSON.parse(localStorage.getItem('openDropdownIds')) || [];
+    const isHomePage = window.location.pathname === "/"; // Verifique se a URL da home está correta
 
-    // Reabre todos os dropdowns que estavam abertos
-    openDropdownIds.forEach(function (dropdownId) {
-        $("#" + dropdownId).find('.hs-accordion-content').slideDown();
-        $("#" + dropdownId).find('.hs-accordion-toggle').attr("aria-expanded", "true");
-    });
+    let openDropdownIds = JSON.parse(localStorage.getItem('openDropdownIds')) || [];
+
+    if (isHomePage) {
+        localStorage.removeItem('openDropdownIds');
+        openDropdownIds = [];
+    } else {
+        openDropdownIds.forEach(function (dropdownId) {
+            $("#" + dropdownId).find('.hs-accordion-content').slideDown();
+            $("#" + dropdownId).find('.hs-accordion-toggle').attr("aria-expanded", "true");
+        });
+    }
 
     // Quando o vídeo é clicado
     $(".video-link").on("click", function (e) {
-        // Pega o id do dropdown relacionado ao vídeo clicado
         const dropdownId = $(this).closest('.hs-accordion').attr('id');
 
-        // Verifica se o dropdown já está na lista de abertos
         if (!openDropdownIds.includes(dropdownId)) {
-            openDropdownIds.push(dropdownId); // Adiciona o dropdown à lista de abertos
+            openDropdownIds.push(dropdownId);
         }
 
-        // Salva a lista de dropdowns abertos no localStorage
         localStorage.setItem('openDropdownIds', JSON.stringify(openDropdownIds));
     });
 
-    // Quando o dropdown é clicado (abrir ou fechar)
     $(".hs-accordion-toggle").on("click", function () {
         const dropdownId = $(this).closest('.hs-accordion').attr('id');
-
-        // Verifica o estado atual (se está aberto ou fechado)
         const isExpanded = $(this).attr("aria-expanded") === "true";
 
         if (isExpanded) {
-            // Se estava aberto e o usuário clicou, remove da lista
             const index = openDropdownIds.indexOf(dropdownId);
             if (index > -1) {
-                openDropdownIds.splice(index, 1); // Remove o dropdown da lista de abertos
+                openDropdownIds.splice(index, 1);
             }
         } else {
-            // Se estava fechado e o usuário clicou, adiciona à lista
             if (!openDropdownIds.includes(dropdownId)) {
                 openDropdownIds.push(dropdownId);
             }
         }
 
-        // Atualiza o localStorage
         localStorage.setItem('openDropdownIds', JSON.stringify(openDropdownIds));
     });
 }

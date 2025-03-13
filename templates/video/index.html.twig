@@ -1,72 +1,18 @@
 {% extends 'base.html.twig' %}
 
 {% block main %}
-    <div class="absolute top-0 end-0 mt-8 z-50">
-        {% for type, messages in app.flashes %}
-            {% for message in messages %}
-                <!-- Toast -->
-                <div id="dismiss-toast" class="hs-removing:translate-x-5 hs-removing:opacity-0 transition duration-300 max-w-xs {% if type == 'success' %} bg-green-500 {% elseif type == 'error' %} bg-red-500 {% endif %} rounded-xl shadow-lg" role="alert" tabindex="-1" aria-labelledby="hs-toast-dismiss-button-label hs-toast-placement-top-right-label">
-                    <div class="flex p-4">
-                        <p id="hs-toast-dismiss-button-label hs-toast-placement-top-right-label" class="text-sm text-white">
-                            {{ message }}
-                        </p>
 
-                        <div class="ms-auto">
-                            <button type="button" class="inline-flex shrink-0 justify-center items-center size-5 rounded-lg text-white opacity-50 hover:opacity-100 focus:outline-none focus:opacity-100" aria-label="Close" data-hs-remove-element="#dismiss-toast">
-                                <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M18 6 6 18"></path>
-                                    <path d="m6 6 12 12"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        {% endfor %}
+    <h1 class="mt-12 text-2xl text-center text-primary font-bold dark:text-dark-text">Vídeos</h1>
+
+    <div class="flex flex-col gap-12 items-center justify-center text-primary mt-28 w-full dark:text-dark-text">
+        <a href="{{ path('video_list') }}"
+           class="text-lg w-1/2 lg:w-1/6 h-20 px-4 py-2 gap-4 bg-primary rounded-md flex items-center justify-around text-dark-text shadow-md transition-all duration-150 ease-in-out transform active:scale-95 active:shadow-lg">
+            <i class="fa-solid fa-list-ul"></i> Listar
+        </a>
+        <a href="{{ path('video_new') }}"
+           class="text-lg w-1/2 lg:w-1/6 h-20 px-4 py-2 gap-4 bg-primary rounded-md flex items-center justify-around text-dark-text shadow-md transition-all duration-150 ease-in-out transform active:scale-95 active:shadow-lg">
+            <i class="fa-solid fa-file-circle-plus"></i> Cadastrar
+        </a>
     </div>
-    <h1 class="mt-12 text-center font-bold text-xl text-primary dark:text-dark-text">Videos</h1>
-    <div class="flex flex-col items-center justify-center w-full h-[60vh]">
 
-        <div class="flex flex-col">
-            <div class="overflow-x-auto w-full"> <!-- Faz o contêiner ocupar 100% da largura -->
-                <div class="p-1.5 min-w-[50%] inline-block align-middle"> <!-- Define uma largura mínima de 50% -->
-                    <div class="border rounded-lg divide-y divide-gray-200">
-                        <div class="overflow-hidden max-h-[60vh] overflow-y-auto"> <!-- Rolagem vertical limitada -->
-                            <table class="min-w-full divide-y divide-gray-200"> <!-- Garante que a tabela ocupe 100% da largura disponível -->
-                                <thead class="bg-primary">
-                                <tr>
-                                    <th scope="col" class="px-6 py-3 text-xs font-medium text-gray-100 uppercase">ID</th>
-                                    <th scope="col" class="px-6 py-3 text-xs font-medium text-gray-100 uppercase">Titulo</th>
-                                    <th scope="col" class="px-6 py-3 text-xs font-medium text-gray-100 uppercase">ID do vídeo</th>
-                                    <th scope="col" class="px-6 py-3 text-xs font-medium text-gray-100 uppercase">Tipo do treinamento</th>
-                                    <th scope="col" class="px-6 py-3 text-xs font-medium text-gray-100 uppercase">Ativo</th>
-                                    <th scope="col" class="px-6 py-3 text-xs font-medium text-gray-100 uppercase"></th>
-                                </tr>
-                                </thead>
-                                <tbody class="divide-y divide-gray-600">
-                                {% for video in videos %}
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary dark:text-dark-text">{{ video.id }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary dark:text-dark-text">{{ video.title }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary dark:text-dark-text">{{ video.videoId }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary dark:text-dark-text">{{ video.typeTraining.name  }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary dark:text-dark-text">{{ video.active ? "Sim" : "Não" }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary dark:text-dark-text">
-                                            <a href="{{ path('video_edit', {'id': video.id}) }}" title="Editar" class="w-24 h-24 p-2 text-dark-text dark:text-primary bg-primary dark:bg-button-light dark:hover:bg-button-hover rounded-md shadow-md hover:bg-hover"><i class="fa-solid fa-pen-to-square"></i></a>
-                                        </td>
-                                    </tr>
-                                {% else %}
-                                    <tr>
-                                        <td class="bg-cyan-500 w-full"><i class="fa-info-circle"></i> Nenhum resultado encontrado!</td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
 {% endblock %}
