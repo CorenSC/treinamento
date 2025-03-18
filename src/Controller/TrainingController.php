@@ -44,7 +44,7 @@ final class TrainingController extends AbstractController
             $this->trainingRepository->add($training);
             $this->addFlash('success', 'Treinamento criado com sucesso.');
 
-            return $this->redirectToRoute('training_listar', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('training_list', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('training/new.html.twig', [
@@ -71,7 +71,7 @@ final class TrainingController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', 'Treinamento atualizado com sucesso.');
-            return $this->redirectToRoute('training_listar', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('training_list', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('training/edit.html.twig', [

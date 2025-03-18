@@ -50,7 +50,7 @@ final class VideoController extends AbstractController
 
             $this->videoRepository->add($video);
             $this->addFlash('success', 'Video criado com sucesso.');
-            return $this->redirectToRoute('video_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('video_show', ['id' => $video->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('video/new.html.twig', [
@@ -76,7 +76,7 @@ final class VideoController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
             $this->addFlash('success', 'Video alterado com sucesso!');
-            return $this->redirectToRoute('video_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('video_show', ['id' => $video->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('video/edit.html.twig', [
