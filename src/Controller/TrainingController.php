@@ -19,7 +19,7 @@ final class TrainingController extends AbstractController
     }
 
     #[Route('/', name: 'index', methods: ['GET'])]
-    public function index()
+    public function index(): Response
     {
         return $this->render('training/index.html.twig');
     }

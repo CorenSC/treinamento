@@ -10,12 +10,6 @@
                         aria-expanded="false"
                         data-accordion-id="{{ typeName|lower|replace({' ': '-'}) }}-accordion-sub-1-collapse-1"
                         aria-controls="{{ typeName|lower|replace({' ': '-'}) }}-accordion-sub-1-collapse-1">
-                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="18" cy="15" r="3"/>
-                        <circle cx="9" cy="7" r="4"/>
-                        <path d="M10 15H6a4 4 0 0 0-4 4v2"/>
-                        <!-- Restante do SVG -->
-                    </svg>
                     {{ typeName }}
                     {# Ícones de dropdown #}
                     <svg class="hs-accordion-active:block ms-auto hidden size-4 text-gray-600 group-hover:text-gray-500 dark:text-neutral-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -35,7 +29,7 @@
                             <li>
                                 <a class="w-full inline-flex shrink-0 items-center gap-x-2 p-2 pe-6 text-start rounded-md hover:bg-neutral-500/60 active:bg-neutral-500/60 transition-all duration-150 ease-in-out transform active:scale-95 text-dark-text dark:hover:bg-neutral-400/60 dark:focus:bg-neutral-400/60 text-base video-link"
                                    href="{{ path('video_show', {'id': video.id}) }}">
-                                    {{ video.title }}
+                                    - {{ video.title }}
                                 </a>
                             </li>
                         {% endfor %}
@@ -47,12 +41,6 @@
             <li>
                 <a class="w-full inline-flex shrink-0 items-center gap-x-2 p-2 text-start rounded-md hover:bg-neutral-500/60 active:bg-neutral-500/60 transition-all duration-150 ease-in-out transform active:scale-95 text-dark-text dark:hover:bg-neutral-400/60 dark:focus:bg-neutral-400/60 text-base"
                    href="{{ path('video_show', {'id': videoList[0].id}) }}" target="_blank">
-                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="18" cy="15" r="3"/>
-                        <circle cx="9" cy="7" r="4"/>
-                        <path d="M10 15H6a4 4 0 0 0-4 4v2"/>
-                        <!-- Restante do SVG -->
-                    </svg>
                     {{ typeName }}
                 </a>
             </li>
